@@ -1,0 +1,19 @@
+{
+  "name": "casino-blackjack-21-master",
+  "version": "1.0.0",
+  "description": "Premium Casino Blackjack 21 Card Game 95% RTP Balance Synced Engine",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "axios": "^1.7.9",
+    "express": "^4.19.2",
+    "socket.io": "^4.7.5"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "author": "BETLOVER24",
+  "license": "ISC"
+}
