@@ -25,7 +25,7 @@ app.use((req, res, next) => {
 });
 
 // 🎰 [উইনগো কালার ট্রেড ওরিজিনাল ডোমেইন সিঙ্ক ভাই ভাই]
-const MAIN_SITE_URL = "https://onrender.com"; 
+const MAIN_SITE_URL = "https://betlover247.onrender.com"; 
 const cardSuitsPool = ["HEARTS", "DIAMONDS", "CLUBS", "SPADES"];
 
 // একটিভ গেম সেশন ট্র্যাকার মেমোরি নোড
@@ -282,7 +282,7 @@ io.on('connection', (socket) => {
 });
 
 // ⚡ কাস্টম ব্ল্যাকজ্যাক নোড সার্ভার পোর্ট গেটওয়ে লাইভ অন ফায়ার
-const PORT = process.env.PORT || 29000;
+const PORT = process.env.PORT || 17000;
 server.listen(PORT, () => {
     console.log(`🃏 Blackjack 21 Engine Running on port ${PORT}`);
 });
