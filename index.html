@@ -103,22 +103,28 @@
             let maxCardsCount = Math.max(pList.length, dList.length);
             let currentCardIdx = 0;
 
+                       // ⏱️ লাইভ ক্যাসিনো স্টাইল ৩০০ মিলি-সেকেন্ড পর পর প্রথম রাউন্ডের কার্ড বন্টন টাইমার লুপ (১০০% নিখুঁত বাটন আনলকার বর্ম ভাই ভাই)
             const cardDealingInterval = setInterval(() => {
                 if (currentCardIdx >= maxCardsCount) {
                     clearInterval(cardDealingInterval);
                     
                     // লাইভ স্কোর ফ্রেম পুশ
-                    document.getElementById("player-score").innerText = serverData.playerScore;
-                    document.getElementById("dealer-score").innerText = serverData.dealerScore;
+                    if(document.getElementById("player-score")) document.getElementById("player-score").innerText = serverData.playerScore;
+                    if(document.getElementById("dealer-score")) document.getElementById("dealer-score").innerText = serverData.dealerScore;
 
-                    // 🎯 [নতুন সার্ভার ফাইল ডাটা পার্সার বর্ম লক ভাই ভাই]
-                    if (serverData.status === "win" || serverData.status === "lose" || serverData.status === "push") {
-                        showFinalGameReward(serverData.status, serverData.winAmount, serverData.result);
-                    } else {
-                        // কার্ড বন্টন শেষ হওয়া মাত্রই HIT এবং STAND বাটন ওয়ান-শটে সচল হবে!
+                    // 🎯 [মেগা আনলকার ট্রিক]: ব্যাকএন্ড থেকে আসা নতুন গেম স্টেট সরাসরি ক্র্যাক করে বাটন সচল করার কিংস লক
+                    if (serverData.status === "playing" || serverData.gameData?.status === "playing") {
+                        // খেলা রানিং থাকলে HIT এবং STAND বোতাম ওয়ান-শটে গোল্ডেন নিয়নে সচল অন হবে ওস্তাদ!
                         if (document.getElementById("hit-btn")) document.getElementById("hit-btn").disabled = false;
                         if (document.getElementById("stand-btn")) document.getElementById("stand-btn").disabled = false;
-                        document.getElementById("win-text-msg").innerText = "📈 HIT নাকি STAND? আপনার চাল চালুন ওস্তাদ!";
+                        if (document.getElementById("spin-btn")) document.getElementById("spin-btn").disabled = true; // DEAL বোতাম ফ্রিজ
+                        if (document.getElementById("win-text-msg")) document.getElementById("win-text-msg").innerText = "📈 HIT নাকি STAND? আপনার চাল চালুন ওস্তাদ!";
+                    } else {
+                        // যদি প্রথম ২ কার্ডেই ব্ল্যাকজ্যাক বা বাস্ট ডাইরেক্ট ক্লোজ হয়ে যায় তবে রেজাল্ট শো করবে ওস্তাদ
+                        let finalStatus = serverData.status || serverData.gameData?.status;
+                        let finalWinAmount = serverData.winAmount || serverData.gameData?.winAmount || 0;
+                        let finalResult = serverData.result || serverData.gameData?.result || "Result End";
+                        showFinalGameReward(finalStatus, finalWinAmount, finalResult);
                     }
                     return;
                 }
@@ -145,7 +151,7 @@
 
                 currentCardIdx++;
             }, 300);
-        }
+ 
 
         async function handleBlackjackDeal() {
             if (isSpinning || isSpinning === true) return;
