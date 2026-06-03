@@ -99,7 +99,7 @@
             }
         }
 
-        // 🎰 [🎰 ৫৪ গেমের সুপ্রিম ওরিজিনাল রুট ইমেজ সিঙ্ক জাভাস্ক্রিপ্ট এনিমেশন ইঞ্জিন ভাই ভাই - অন্দর বাহার সিঙ্ক]
+                // 🎰 [🎰 ৫৪ গেমের সুপ্রিম ওরিজিনাল রুট ইমেজ সিঙ্ক জাভাস্ক্রিপ্ট এনিমেশন ইঞ্জিন ভাই ভাই - ১০০% লুপ প্রুফ বর্ম]
         function animateCardDealing(serverData) {
             const pZone = document.getElementById("player-cards-container");
             const dZone = document.getElementById("dealer-cards-container");
@@ -107,10 +107,10 @@
             const pList = serverData.playerCards || [];
             const dList = serverData.dealerCards || [];
 
-            pZone.innerHTML = "";
-            dZone.innerHTML = "";
-            document.getElementById("player-score").innerText = "0";
-            document.getElementById("dealer-score").innerText = "0";
+            if (pZone) pZone.innerHTML = "";
+            if (dZone) dZone.innerHTML = "";
+            if (document.getElementById("player-score")) document.getElementById("player-score").innerText = "0";
+            if (document.getElementById("dealer-score")) document.getElementById("dealer-score").innerText = "0";
 
             let maxCardsCount = Math.max(pList.length, dList.length);
             let currentCardIdx = 0;
@@ -135,35 +135,46 @@
                     return;
                 }
 
+                // 🔵 প্লেয়ারের CARD সরাসরি গিটহাব রুট ডিরেক্টরি থেকে লোড চেইন (বড় হাতের কেস-সেন্সিটিভ ট্র্যাকার লক)
                 if (currentCardIdx < pList.length) {
                     const c = pList[currentCardIdx];
                     const cardDiv = document.createElement("div");
                     cardDiv.className = "card-deal-animation-node";
                     cardDiv.style.width = "55px"; cardDiv.style.height = "80px"; cardDiv.style.flexShrink = "0";
-                    cardDiv.innerHTML = `<img src="${c.value}_of_${c.suit.toUpperCase()}.png" style="width:100%;height:100%;object-fit:cover;display:block;">`;
-                    pZone.appendChild(cardDiv);
+                    
+                    // 🎯 তাসের গোলাম, বিবি, সাহেব ও এক্কার ওরিজিনাল ইমেজ পাথ বড় হাতের অক্ষরে কনভার্ট লক ওস্তাদ!
+                    let finalVal = String(c.value).toUpperCase();
+                    let finalSuit = String(c.suit).toUpperCase();
+                    
+                    cardDiv.innerHTML = `<img src="${finalVal}_of_${finalSuit}.png" style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.src='card-back.png'">`;
+                    if (pZone) pZone.appendChild(cardDiv);
                     playAudio('spin');
                 }
 
+                // 🔴 ব্যাঙ্কারের CARD সরাসরি গিটহাব রুট ডিরেক্টরি থেকে লোড চেইন (ভাঙা ছবি ও লুপ ব্লকার ফলব্যাক বর্ম)
                 if (currentCardIdx < dList.length) {
                     const c = dList[currentCardIdx];
                     const cardDiv = document.createElement("div");
                     cardDiv.className = "card-deal-animation-node";
                     cardDiv.style.width = "55px"; cardDiv.style.height = "80px"; cardDiv.style.flexShrink = "0";
                     
-                    let finalCardImgSrc = `${c.value}_of_${c.suit.toUpperCase()}.png`;
-                    if (c.value === "HIDDEN" || c.suit === "UNKNOWN" || c.value === "hidden" || c.suit === "unknown") {
+                    let finalVal = String(c.value).toUpperCase();
+                    let finalSuit = String(c.suit).toUpperCase();
+                    
+                    let finalCardImgSrc = `${finalVal}_of_${finalSuit}.png`;
+                    if (finalVal === "HIDDEN" || finalSuit === "UNKNOWN") {
                         finalCardImgSrc = "card-back.png";
                     }
                     
-                    cardDiv.innerHTML = `<img src="${finalCardImgSrc}" style="width:100%;height:100%;object-fit:cover;display:block;">`;
-                    dZone.appendChild(cardDiv);
+                    cardDiv.innerHTML = `<img src="${finalCardImgSrc}" style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.src='card-back.png'">`;
+                    if (dZone) dZone.appendChild(cardDiv);
                     playAudio('spin');
                 }
 
                 currentCardIdx++;
             }, 300);
         }
+
 
         async function handleBlackjackDeal() {
             if (isSpinning || isSpinning === true) return;
